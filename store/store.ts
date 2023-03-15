@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "../slices/userSlice";
+import todoReducer from "../slices/todoSlice";
 export function makeStore() {
   return configureStore({
     reducer: {
-      user: userReducer,
+      todo: todoReducer,
     },
   });
 }

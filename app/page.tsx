@@ -2,20 +2,20 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createUser, fetchUsers } from "@/slices/userSlice";
+import { createTodo, fetchTodos } from "@/slices/todoSlice";
 import { AppDispatch, RootState } from "@/store/store";
 
 export default function Home() {
-  const userRef = useRef(false);
+  const todoRef = useRef(false);
 
   const { entities, loading, value } = useSelector(
-    (state: RootState) => state.user
+    (state: RootState) => state.todo
   );
 
   const [page, setPage] = useState(1);
 
   const dispatch = useDispatch<AppDispatch>();
-  const [name, setName] = useState("");
+  const [title, setTitle] = useState("");
 
   const changePage = (operation: string) => {
     let newPage = page;
@@ -24,40 +24,40 @@ export default function Home() {
     } else {
       setPage(newPage--);
     }
-    dispatch(fetchUsers({ page: newPage }));
+    dispatch(fetchTodos({ page: newPage }));
   };
   useEffect(() => {
-    if (userRef.current === false) {
-      dispatch(fetchUsers({ page: 1 }));
+    if (todoRef.current === false) {
+      dispatch(fetchTodos({ page: 1 }));
     }
 
     return () => {
-      userRef.current = true;
+      todoRef.current = true;
     };
   }, []);
 
   return (
     <div>
-      <h1>Create User</h1>
+      <h1>Create Todo</h1>
 
       <input
         type="text"
         onChange={(e) => {
-          setName(e.target.value);
+          setTitle(e.target.value);
         }}
-        value={name}
+        value={title}
       />
 
       <button
         onClick={() => {
-          dispatch(createUser({ title: name }));
+          dispatch(createTodo({ title }));
         }}
       ></button>
 
       {loading ? (
         <h1>Loading...</h1>
       ) : (
-        entities?.map((user: any) => <h3 key={user.id}>{user.title}</h3>)
+        entities?.map((todo: any) => <h3 key={todo.id}>{todo.title}</h3>)
       )}
 
       <button

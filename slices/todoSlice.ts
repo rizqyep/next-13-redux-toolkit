@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const fetchUsers = createAsyncThunk(
-  "users/getAllUsers",
+export const fetchTodos = createAsyncThunk(
+  "todos/getAllTodos",
   async ({ page }: { page?: number }) => {
     const response = await fetch(
       `https://jsonplaceholder.typicode.com/todos?_page=${
@@ -13,8 +13,8 @@ export const fetchUsers = createAsyncThunk(
   }
 );
 
-export const createUser = createAsyncThunk(
-  "users/createUser",
+export const createTodo = createAsyncThunk(
+  "todos/createTodo",
   async ({ title }: { title: any }) => {
     const response = await fetch("https://jsonplaceholder.typicode.com/todos", {
       method: "POST",
@@ -36,28 +36,28 @@ const initialState = {
   loading: false,
 } as any;
 
-const userSlice = createSlice({
-  name: "users",
+const todoSlice = createSlice({
+  name: "todos",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchUsers.fulfilled, (state, action) => {
+    builder.addCase(fetchTodos.fulfilled, (state, action) => {
       state.loading = false;
       state.entities = action.payload;
     });
-    builder.addCase(fetchUsers.pending, (state, action) => {
+    builder.addCase(fetchTodos.pending, (state, action) => {
       state.loading = true;
     });
 
-    builder.addCase(createUser.fulfilled, (state, action) => {
+    builder.addCase(createTodo.fulfilled, (state, action) => {
       state.loading = false;
       console.log(action.payload);
       state.entities = [action.payload, ...state.entities.slice(0, 4)];
     });
-    builder.addCase(createUser.pending, (state, action) => {
+    builder.addCase(createTodo.pending, (state, action) => {
       state.loading = true;
     });
   },
 });
 
-export default userSlice.reducer;
+export default todoSlice.reducer;
